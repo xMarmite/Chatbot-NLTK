@@ -50,71 +50,108 @@ class ContextChat(Chat):
 unanswered = []
 classes = [] #this should be a list of names of all students
 shopping_list = []
+failsafe = ['quit']
 
-def responseTree(answer):
+def response1():
     feeling = input("I'm fine, and you?\n>")
-    if 'bad' in feeling:
+    if 'bad' in feeling or 'not good' in feeling:
         return "That sucks."
-    elif 'good' in feeling:
+    elif 'good' in feeling or 'fine' in feeling:
         return "That's great!"
     else:
         return "I don't understand..."
 
+def response2():
+    return None
+
+def response3(answer):
+    return answer
+
+def response4(answer):
+    return answer
+
+def response5():
+    return None
+
+def response6():
+    return None
+
+def response7():
+    return None
+
+def response8():
+    return None
+
+def response9():
+    return None
+
+def response10():
+    return None
+
+def response11():
+    return None
+
+def default():
+    return None
+
 def name():
     name = input("First, please tell me your name!\n>")
-    #if name in classes:
     return name
-    #else:
-    #    print("Unfortunately, you aren't taking art, which means that I can't help you :) Please enter a valid name!")
-    #    name()
-
-def add_to_list(item):
-    '''
-    This function adds an item to the shopping list.
-    If given item is already in the list it returns
-    False, otherwise it returns True
-    '''
-
-    if item in shopping_list:
-        return False
-    else:
-        shopping_list.append(item)
-        return True
-
-def helper(item):
-    '''
-    This function adds all unanswered questions
-    To a list, which is printed at the end of the session!
-    '''
-    if item in unanswered:
-        return False
-    else:
-        unanswered.append(item)
-        return True
-
+    
 pairs = [
     [
-        r'(.*)(add|put)( )(.*)( )(on|to)(.*)', 
-        [lambda matches: 'Noted!' if add_to_list(matches[3]) else '%3 is already on the list!']
-    ],
-    [
-        r'What is on the list?',
-        [lambda matches: ','.join(shopping_list)],
-    ],
-    [
         r'How are you?',
-        [lambda matches: responseTree(matches)]
+        [lambda matches: response1()]
+    ],
+    [
+        r'(what)(.*)(we)(gonna do|going to do|do)(today|today?)',
+        [lambda matches: response2()]
+    ],
+    [
+        r'(where)(can|do|is)(.*)',
+        [lambda matches: response3(matches)]
+    ],
+    [
+        r'(where)(can|do|should)(.*)',
+        [lambda matches: response4(matches)]
+    ],
+    [
+        r'(what|which)(block)(is next|is next?)',
+        [lambda matches: response5()]
+    ],
+    [
+        r'(what time|when)(does)(class)(start|start?)',
+        [lambda matches: response6()]
+    ],
+    [
+        r'(what time|when)(does|is)(class)(end|over)',
+        [lambda matches: response7()]
+    ],
+    [
+        r'(what)(am|are)(i|we)(supposed|should)(do|to do|do?|to do?)',
+        [lambda matches: response8()]
+    ],
+    [
+        r'(what)(is|are)(a global issue|a global issue?|global issues|global issues?|the global issues?|the global issue)',
+        [lambda matches: response9()]
+    ],
+    [
+        r'(can|may)(i|we)(listen to)(music|music|spotify|spotify)?',
+        [lambda matches: response10()]
+    ],
+    [
+        r'(can|may)(i|we)(go to|use)(the toilet|the bathroom)',
+        [lambda matches: response11()]
     ],
     [
         r'(.*)',
-        [lambda matches: 'Your question has been added to a list of unanswered questions. Please be patient! :)' if helper(matches) else '%1 is already on the list of questions!']
-    ],
+        [lambda matches: default()]
+    ]
 ]
-
 if __name__ == "__main__":
     print("Hi! This is a bot that is supposed to help you with art n stuff...")
-    name()
-    print("Please ask me for help if you have any questions!")
+    name = name()
+    print("Please ask me for help if you have any questions,",name)
     chat = ContextChat(pairs, reflections)
     chat.converse()
     for item in unanswered:
