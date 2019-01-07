@@ -116,11 +116,11 @@ pairs = [
         [lambda matches: response4(matches)]
     ],
     [
-        r'(what|which)(block)(is next|is next?)',
+        r'(what|which)(block)(is next?)',
         [lambda matches: response5()]
     ],
     [
-        r'(what time|when)(does)(class)(start|start?)',
+        r'(what time|when)(does)(class)(start?)',
         [lambda matches: response6()]
     ],
     [
@@ -128,15 +128,15 @@ pairs = [
         [lambda matches: response7()]
     ],
     [
-        r'(what)(am|are)(i|we)(supposed|should)(do|to do|do?|to do?)',
+        r'(what)(am|are)(i|we)(supposed|should)(do?|to do?)',
         [lambda matches: response8()]
     ],
     [
-        r'(what)(is|are)(a global issue|a global issue?|global issues|global issues?|the global issues?|the global issue)',
+        r'(what)(is|are)(global issues?|the global issues?|a global issue?)',
         [lambda matches: response9()]
     ],
     [
-        r'(can|may)(i|we)(listen to)(music|music|spotify|spotify)?',
+        r'(can|may)(i|we)(listen to)(music?|spotify)?',
         [lambda matches: response10()]
     ],
     [
