@@ -112,8 +112,13 @@ def response9(answer):
     return str(answer)
 
 def response10(answer):
-    return str(answer)
-
+    music = input("Will you work while you listen to music/spotify?\n>")
+    if 'ok' in music or 'sure' in music:
+        return "You may listen to music."
+    elif 'no' in music or 'nah' in music:
+        return "Then you may not listen to music"
+    else:
+        return "Please use a differnt answer to get the appropriate response"
 def response11(answer):
     return str(answer)
 
