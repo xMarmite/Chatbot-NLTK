@@ -1,7 +1,10 @@
 from nltk.chat.util import Chat, reflections
+import time
+import datetime
 import re
 import random
 import string
+import json, requests
 
 # === This is the extension code for the NLTK library ===
 #        === You dont have to understand it ===
@@ -48,11 +51,9 @@ class ContextChat(Chat):
 
 # === Your code should go here ===
 unanswered = []
-classes = [] #this should be a list of names of all students
-shopping_list = []
 failsafe = ['quit']
 
-def response1():
+def response1(answer):
     feeling = input("I'm fine, and you?\n>")
     if 'bad' in feeling or 'not good' in feeling:
         return "That sucks."
@@ -61,38 +62,43 @@ def response1():
     else:
         return "I don't understand..."
 
-def response2():
-    return None
+def response2(answer):
+    return str(answer)
 
 def response3(answer):
-    return answer
+    return str(answer)
 
 def response4(answer):
-    return answer
+    return str(answer)
 
-def response5():
-    return None
+def response5(answer):
+    day = datetime.datetime.today()
+    day = str(day)
+    day = day[0:-10]
+    block = requests.get("https://www.googleapis.com/calendar/v3/calendars/aswarsaw.org_oo26u99kpp6rlbq0ahrmnk8v14@group.calendar.google.com/events")
+    parsed_json = json.loads(block.text)
+    return str(parsed_json)
 
-def response6():
-    return None
+def response6(answer):
+    return str(answer)
 
-def response7():
-    return None
+def response7(answer):
+    return str(answer)
 
-def response8():
-    return None
+def response8(answer):
+    return str(answer)
 
-def response9():
-    return None
+def response9(answer):
+    return str(answer)
 
-def response10():
-    return None
+def response10(answer):
+    return str(answer)
 
-def response11():
-    return None
+def response11(answer):
+    return str(answer)
 
-def default():
-    return None
+def default(answer):
+    return str(answer)
 
 def name():
     name = input("First, please tell me your name!\n>")
@@ -101,11 +107,11 @@ def name():
 pairs = [
     [
         r'How are you?',
-        [lambda matches: response1()]
+        [lambda matches: response1(matches)]
     ],
     [
         r'(what)(.*)(we)(gonna do|going to do|do)(today|today?)',
-        [lambda matches: response2()]
+        [lambda matches: response2(matches)]
     ],
     [
         r'(where)(can|do|is)(.*)',
@@ -116,36 +122,36 @@ pairs = [
         [lambda matches: response4(matches)]
     ],
     [
-        r'(what|which)(block)(is next?)',
-        [lambda matches: response5()]
+        r'(what|which) (block)(.*)(next)',
+        [lambda matches: response5(matches)]
     ],
     [
         r'(what time|when)(does)(class)(start?)',
-        [lambda matches: response6()]
+        [lambda matches: response6(matches)]
     ],
     [
         r'(what time|when)(does|is)(class)(end|over)',
-        [lambda matches: response7()]
+        [lambda matches: response7(matches)]
     ],
     [
         r'(what)(am|are)(i|we)(supposed|should)(do?|to do?)',
-        [lambda matches: response8()]
+        [lambda matches: response8(matches)]
     ],
     [
         r'(what)(is|are)(global issues?|the global issues?|a global issue?)',
-        [lambda matches: response9()]
+        [lambda matches: response9(matches)]
     ],
     [
         r'(can|may)(i|we)(listen to)(music?|spotify)?',
-        [lambda matches: response10()]
+        [lambda matches: response10(matches)]
     ],
     [
         r'(can|may)(i|we)(go to|use)(the toilet|the bathroom)',
-        [lambda matches: response11()]
+        [lambda matches: response11(matches)]
     ],
     [
         r'(.*)',
-        [lambda matches: default()]
+        [lambda matches: default(matches)]
     ]
 ]
 if __name__ == "__main__":
