@@ -107,50 +107,62 @@ def name():
 pairs = [
     [
         r'How are you?',
+        #done
         [lambda matches: response1(matches)]
     ],
     [
         r'(what)(.*)(we)(gonna do|going to do|do)(today|today?)',
+        #talk and api
         [lambda matches: response2(matches)]
     ],
     [
         r'(where)(can|do|is)(.*)',
+        #need to talk
         [lambda matches: response3(matches)]
     ],
     [
         r'(where)(can|do|should)(.*)',
+        #need to talk
         [lambda matches: response4(matches)]
     ],
     [
         r'(what|which) (block)(.*)(next)',
+        #working on api
         [lambda matches: response5(matches)]
     ],
     [
         r'(what time|when)(does)(class)(start?)',
+        # need api
         [lambda matches: response6(matches)]
     ],
     [
         r'(what time|when)(does|is)(class)(end|over)',
+        #need api
         [lambda matches: response7(matches)]
     ],
     [
         r'(what)(am|are)(i|we)(supposed|should)(do?|to do?)',
+        #talk and api
         [lambda matches: response8(matches)]
     ],
     [
         r'(what)(is|are)(global issues?|the global issues?|a global issue?)',
+        #talk and api
         [lambda matches: response9(matches)]
     ],
     [
         r'(can|may)(i|we)(listen to)(music?|spotify)?',
+        # max W
         [lambda matches: response10(matches)]
     ],
     [
         r'(can|may)(i|we)(go to|use)(the toilet|the bathroom)',
+        #max W
         [lambda matches: response11(matches)]
     ],
     [
         r'(.*)',
+        #Max W - find default answers (appropriate ones)
         [lambda matches: default(matches)]
     ]
 ]
