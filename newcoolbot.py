@@ -5,6 +5,10 @@ import re
 import random
 import string
 import json, requests
+import sys
+from oauth2client import client
+from googleapiclient import sample_tools
+
 
 # === This is the extension code for the NLTK library ===
 #        === You dont have to understand it ===
@@ -75,10 +79,26 @@ def response5(answer):
     day = datetime.datetime.today()
     day = str(day)
     day = day[0:-10]
-    block = requests.get("https://www.googleapis.com/calendar/v3/calendars/aswarsaw.org_oo26u99kpp6rlbq0ahrmnk8v14@group.calendar.google.com/events")
-    parsed_json = json.loads(block.text)
-    return str(parsed_json)
-
+    nextt = main(sys.argv)
+    
+    service, flags = sample_tools.init(
+        argv, 'calendar', 'v3', __doc__, __file__,
+        scope='https://www.googleapis.com/auth/calendar.readonly')
+    try:
+      page_token = None
+      while True:
+        events = service.events().list(calendarId='primary', pageToken=page_token).execute()
+        for event in events['items']:
+          print(event['summary'])
+        page_token = events.get('nextPageToken')
+        if not page_token:
+          break
+    except client.AccessTokenRefreshError:
+        print('The credentials have been revoked or expired, please re-run'
+              'the application to re-authorize.')
+    if __name__ == '__response5__':
+    response5(sys.argv)
+    return nextt
 def response6(answer):
     return str(answer)
 
