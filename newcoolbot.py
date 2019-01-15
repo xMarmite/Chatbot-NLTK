@@ -79,13 +79,11 @@ def response5(answer):
     day = datetime.datetime.today()
     day = str(day)
     day = day[0:-10]
-    nextt = main(sys.argv)
-    
     service, flags = sample_tools.init(
         argv, 'calendar', 'v3', __doc__, __file__,
         scope='https://www.googleapis.com/auth/calendar.readonly')
     try:
-      page_token = None
+     page_token = None
       while True:
         events = service.events().list(calendarId='primary', pageToken=page_token).execute()
         for event in events['items']:
@@ -96,9 +94,8 @@ def response5(answer):
     except client.AccessTokenRefreshError:
         print('The credentials have been revoked or expired, please re-run'
               'the application to re-authorize.')
-    if __name__ == '__response5__':
-    response5(sys.argv)
-    return nextt
+    if __name__ == '__main__':
+    main(sys.argv)
 def response6(answer):
     return str(answer)
 
@@ -112,18 +109,29 @@ def response9(answer):
     return str(answer)
 
 def response10(answer):
-    music = input("Will you work while you listen to music/spotify?\n>")
-    if 'ok' in music or 'sure' in music:
-        return "You may listen to music."
-    elif 'no' in music or 'nah' in music:
-        return "Then you may not listen to music"
-    else:
-        return "Please use a differnt answer to get the appropriate response"
+    music = input("Will you work while you listen to music?\n>")
+    if 'ok' in str(music.lower()) or 'sure' in str(music.lower()) or 'yes' in str(music.lower()):
+        return "You may listen to music!"
+    elif 'no' in str(music.lower()) or 'nah' in str(music.lower()):
+        return "Then you may not listen to music."
+    else: 
+        print("Please give me an answer that makes sense.")
+        response10(answer)
 def response11(answer):
-    return str(answer)
+    if 'can' in answer:
+        print("I don't know, can you?")
+        room = input(">")
+        if 'yes' in room or 'may' in room or 'can' in room:
+            return "Of course you may!"
+    elif 'may' in answer:
+        return "Of course you may!"
 
 def default(answer):
-    return str(answer)
+    unanswered.append(answer)
+    if 'quit' not in answer:
+        return "oopsie doopsie"
+    else:
+        return "See you again!"
 
 def name():
     name = input("First, please tell me your name!\n>")
@@ -136,17 +144,17 @@ pairs = [
         [lambda matches: response1(matches)]
     ],
     [
-        r'(what)(.*)(we)(gonna do|going to do|do)(today|today?)',
+        r'(what)(.*)(we) (gonna do|going to do|do) (today|today?)',
         #talk and api
         [lambda matches: response2(matches)]
     ],
     [
-        r'(where)(can|do|is)(.*)',
+        r'(where) (can|do|is)(.*)',
         #need to talk
         [lambda matches: response3(matches)]
     ],
     [
-        r'(where)(can|do|should)(.*)',
+        r'(where) (can|do|should)(.*)',
         #need to talk
         [lambda matches: response4(matches)]
     ],
@@ -156,32 +164,32 @@ pairs = [
         [lambda matches: response5(matches)]
     ],
     [
-        r'(what time|when)(does)(class)(start?)',
+        r'(what time|when) (does) (class) (start?)',
         # need api
         [lambda matches: response6(matches)]
     ],
     [
-        r'(what time|when)(does|is)(class)(end|over)',
+        r'(what time|when) (does|is) (class) (end|over)',
         #need api
         [lambda matches: response7(matches)]
     ],
     [
-        r'(what)(am|are)(i|we)(supposed|should)(do?|to do?)',
+        r'(what) (am|are) (i|we) (supposed|should) (do?|to do?)',
         #talk and api
         [lambda matches: response8(matches)]
     ],
     [
-        r'(what)(is|are)(global issues?|the global issues?|a global issue?)',
+        r'(what) (is|are) (global issues?|the global issues?|a global issue?)',
         #talk and api
         [lambda matches: response9(matches)]
     ],
     [
-        r'(can|may)(i|we)(listen to)(music?|spotify)?',
+        r'(can|may) (i|we) (listen) (to) (music?|spotify?)',
         # max W
         [lambda matches: response10(matches)]
     ],
     [
-        r'(can|may)(i|we)(go to|use)(the toilet|the bathroom)',
+        r'(can|may) (i|we)(.*)(the) (toilet?|bathroom?)',
         #max W
         [lambda matches: response11(matches)]
     ],
