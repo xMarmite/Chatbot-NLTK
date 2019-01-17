@@ -56,6 +56,35 @@ class ContextChat(Chat):
 # === Your code should go here ===
 unanswered = []
 failsafe = ['quit']
+default = [
+    "Please try again",
+    "I'm sorry, I don't understand...",
+    "",
+    "",
+]
+
+class1Start = "8:30"
+class1End = "9:40"
+class2Start = "9:50"
+class2End = "11:00"
+class3Start = "11:40"
+class3End = "12:50"
+class4Start = "1:05"
+class4End = "2:15"
+class5Start = "2:20"
+class5End = "3:30"
+lunchStart = "11:00"
+lunchEnd = "11:40"
+wedClass1Start = "9:30"
+wedClass1End = "10:45"
+wedClass2Start = "11:05"
+wedClass2End = "12:15"
+wedClass3Start = "12:25"
+wedClass3End = "1:35"
+wedClass4Start = "2:20"
+wedClass4End = "3:30"
+wedLunchStart = "1:35"
+wedLunchEnd = "2:20"
 
 def response1(answer):
     feeling = input("I'm fine, and you?\n>")
@@ -84,7 +113,7 @@ def response5(answer):
         scope='https://www.googleapis.com/auth/calendar.readonly')
     try:
      page_token = None
-      while True:
+     while True:
         events = service.events().list(calendarId='primary', pageToken=page_token).execute()
         for event in events['items']:
           print(event['summary'])
@@ -95,11 +124,20 @@ def response5(answer):
         print('The credentials have been revoked or expired, please re-run'
               'the application to re-authorize.')
     if __name__ == '__main__':
-    main(sys.argv)
+    response5(sys.argv)
 def response6(answer):
     return str(answer)
 
 def response7(answer):
+    time = datetime.datetime.today()
+    time = str(time)
+    time = time[0:-10]
+    day = time[5:10]
+    time = time[11:]
+    if day in wednesdays:
+        print("x")
+    else:
+        print("y")
     return str(answer)
 
 def response8(answer):
@@ -125,11 +163,11 @@ def response11(answer):
             return "Of course you may!"
     elif 'may' in answer:
         return "Of course you may!"
-
 def default(answer):
     unanswered.append(answer)
     if 'quit' not in answer:
-        return "oopsie doopsie"
+        unanswered.append(answer)
+        return random.choice(default)
     else:
         return "See you again!"
 
@@ -140,7 +178,6 @@ def name():
 pairs = [
     [
         r'How are you?',
-        #done
         [lambda matches: response1(matches)]
     ],
     [
@@ -161,7 +198,7 @@ pairs = [
     [
         r'(what|which) (block)(.*)(next)',
         #working on api
-        [lambda matches: response5(matches)]
+       # [lambda matches: response5(matches)]
     ],
     [
         r'(what time|when) (does) (class) (start?)',
@@ -170,7 +207,6 @@ pairs = [
     ],
     [
         r'(what time|when) (does|is) (class) (end|over)',
-        #need api
         [lambda matches: response7(matches)]
     ],
     [
@@ -180,17 +216,15 @@ pairs = [
     ],
     [
         r'(what) (is|are) (global issues?|the global issues?|a global issue?)',
-        #talk and api
+        #talk
         [lambda matches: response9(matches)]
     ],
     [
         r'(can|may) (i|we) (listen) (to) (music?|spotify?)',
-        # max W
         [lambda matches: response10(matches)]
     ],
     [
         r'(can|may) (i|we)(.*)(the) (toilet?|bathroom?)',
-        #max W
         [lambda matches: response11(matches)]
     ],
     [
@@ -211,3 +245,4 @@ if __name__ == "__main__":
             placeholder = True
         else:
             print(item[2:-3])
+print(unanswered)
