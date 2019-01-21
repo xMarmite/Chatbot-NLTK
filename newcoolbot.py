@@ -8,8 +8,8 @@ import json, requests
 import sys
 from oauth2client import client
 from googleapiclient import sample_tools
-
-
+count = 0
+countm = 0
 # === This is the extension code for the NLTK library ===
 #        === You dont have to understand it ===
 class ContextChat(Chat):
@@ -86,13 +86,16 @@ wedClass4End = "3:30"
 wedLunchStart = "1:35"
 wedLunchEnd = "2:20"
 
-def response1(answer):
-    feeling = input("I'm fine, and you?\n>")
-    if 'bad' in feeling or 'not good' in feeling:
-        return "That sucks."
-    elif 'good' in feeling or 'fine' in feeling:
-        return "That's great!"
+def response1(answer, count):
+    if count > 1:
+        return "You've already asked me this!"
     else:
+        feeling = input("I'm fine, and you?\n>")
+        if 'bad' in feeling or 'not good' in feeling:
+            return "That sucks."
+        elif 'good' in feeling or 'fine' in feeling:
+            return "That's great!"
+        else:
         return "I don't understand..."
 
 def response2(answer):
@@ -156,15 +159,18 @@ def response10(answer):
         print("Please give me an answer that makes sense.")
         response10(answer)
 def response11(answer):
-    if 'can' in answer:
-        print("I don't know, can you?")
-        room = input(">")
-        if 'yes' in room or 'may' in room or 'can' in room:
+    if count > 1:
+        print("I already gave you permission!")
+    else:
+        if 'can' in answer:
+            print("I don't know, can you?")
+            room = input(">")
+            if 'yes' in room or 'may' in room or 'can' in room:
+                return "Of course you may!"
+        elif 'may' in answer:
             return "Of course you may!"
-    elif 'may' in answer:
-        return "Of course you may!"
 def default(answer):
-    unanswered.append(answer)
+        unanswered.append(answer)
     if 'quit' not in answer:
         unanswered.append(answer)
         return random.choice(default)
@@ -178,7 +184,7 @@ def name():
 pairs = [
     [
         r'How are you?',
-        [lambda matches: response1(matches)]
+        [lambda matches: count = count + 1,  response1(matches, count)]
     ],
     [
         r'(what)(.*)(we) (gonna do|going to do|do) (today|today?)',
@@ -221,7 +227,7 @@ pairs = [
     ],
     [
         r'(can|may) (i|we) (listen) (to) (music?|spotify?)',
-        [lambda matches: response10(matches)]
+        [lambda matches: count = count + 1, response10(matches, count)]
     ],
     [
         r'(can|may) (i|we)(.*)(the) (toilet?|bathroom?)',
