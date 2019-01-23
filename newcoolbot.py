@@ -63,28 +63,7 @@ default = [
     "",
 ]
 
-class1Start = "8:30"
-class1End = "9:40"
-class2Start = "9:50"
-class2End = "11:00"
-class3Start = "11:40"
-class3End = "12:50"
-class4Start = "1:05"
-class4End = "2:15"
-class5Start = "2:20"
-class5End = "3:30"
-lunchStart = "11:00"
-lunchEnd = "11:40"
-wedClass1Start = "9:30"
-wedClass1End = "10:45"
-wedClass2Start = "11:05"
-wedClass2End = "12:15"
-wedClass3Start = "12:25"
-wedClass3End = "1:35"
-wedClass4Start = "2:20"
-wedClass4End = "3:30"
-wedLunchStart = "1:35"
-wedLunchEnd = "2:20"
+
 
 def response1(answer, count):
     if count > 1:
@@ -102,10 +81,26 @@ def response2(answer):
     return str(answer)
 
 def response3(answer):
-    return str(answer)
+    if 'paper' in answer or 'marker' in answer or 'sharpie' in answer or 'compass' in answer or 'ruler' in answer or 'draw' in answer or 'books' in answer or 'how' in answer:
+        return "They are in the drawing center"
 
+    elif 'tape' in answer or 'scissors' in answer or 'glue' in answer:
+        return "They are located on the bookshelf near Ms.Jordan's desk"
+    elif 'portfolio' in answer:
+        return "On the shelf labeled with your block number"
+    elif 'brush' in answer or 'palette' in answer or 'painting paper' in answer or 'bowl' in answer:
+        return "In the painting center"
+    elif 'cloth' in answer or 'sponge' in answer or 'wash' in answer:
+        return "In the labeled buckets near the sinks"
+    else: 
+        return "I'm not sure, ask Ms.Jordan"
 def response4(answer):
-    return str(answer)
+    if 'brushes' in response3 or 'palette' in response3 or 'bowl' in response3
+        return "In the labeled buckets with soapy water"
+    elif 'scrap paper' in response3
+        return "In the recycle bin (Labeled!!!!)"
+    else:
+        return "I'm not sure, ask Ms.Jordan"
 
 def response5(answer):
     day = datetime.datetime.today()
@@ -129,7 +124,56 @@ def response5(answer):
     if __name__ == '__main__':
     response5(sys.argv)
 def response6(answer):
-    return str(answer)
+    class1Start = 510
+    class1End = 580
+    class2Start = 590
+    class2End = 660
+    class3Start = 700
+    class3End = 770
+    class4Start = 785
+    class4End = 855
+    class5Start = 860
+    class5End = 930
+    lunchStart = 660
+    lunchEnd = 700
+    wedClass1Start = 570
+    wedClass1End = 645
+    wedClass2Start = 665
+    wedClass2End = 735
+    wedClass3Start = 745
+    wedClass3End = 815
+    wedClass4Start = 860
+    wedClass4End = 930
+    wedLunchStart = 815
+    wedLunchEnd = 860
+    wednesdays = ['01-23','01-30','02-06','02-13','02-20','02-27','03-06','03-13','03-20','03-27','04-03','04-10','04-17','04-24','05-01','05-08','05-15','05-22','05-29','06-05','06-12','06-19','06-26','07-03','07-10','07-17','07-24','07-31']
+    day = datetime.datetime.today()
+    day = str(day)
+    day = day[5:]
+    day = day[:-10]
+    hourmins = int(day[6:8])*60
+    mins = int(day[9:])
+    minstotal = mins + hourmins
+    if minstotal < 510 or minstotal > 930:
+        return "You shouldn't be in school right now. are you alright?"
+    if day[0:5] in wednesdays:
+        if minstotal > 570 and minstotal < 665:
+            return "Class starts at 11:05"
+        elif minstotal > 665 and minstotal < 745:
+            return "Class starts at 12:25"
+        elif minstotal > 745 and minstotal < 860:
+            return "Class starts at 14:20"
+    else:
+        if minstotal > 510 and minstotal < 590:
+            return "Class starts at 9:50"
+        elif minstotal > 590 and minstotal < 700:
+            return "Class starts at 11:40"
+        elif minstotal > 700 and minstotal < 785:
+            return "Class starts at 13:05"
+        elif minstotal > 785 and minstotal < 860:
+            return "class starts at 14:20"
+    
+    
 
 def response7(answer):
     time = datetime.datetime.today()
@@ -145,10 +189,6 @@ def response7(answer):
 
 def response8(answer):
     return str(answer)
-
-def response9(answer):
-    return str(answer)
-
 def response10(answer):
     music = input("Will you work while you listen to music?\n>")
     if 'ok' in str(music.lower()) or 'sure' in str(music.lower()) or 'yes' in str(music.lower()):
@@ -219,11 +259,6 @@ pairs = [
         r'(what) (am|are) (i|we) (supposed|should) (do?|to do?)',
         #talk and api
         [lambda matches: response8(matches)]
-    ],
-    [
-        r'(what) (is|are) (global issues?|the global issues?|a global issue?)',
-        #talk
-        [lambda matches: response9(matches)]
     ],
     [
         r'(can|may) (i|we) (listen) (to) (music?|spotify?)',
