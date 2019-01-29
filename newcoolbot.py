@@ -10,8 +10,6 @@ from oauth2client import client
 from googleapiclient import sample_tools
 count = 0
 countm = 0
-# === This is the extension code for the NLTK library ===
-#        === You dont have to understand it ===
 class ContextChat(Chat):
     def respond(self, str):
         # check each pattern
@@ -54,7 +52,7 @@ class ContextChat(Chat):
                 print(self.respond(user_input))
 
 # === Your code should go here ===
-unanswered = []
+questions = []
 failsafe = ['quit']
 default = [
     "Please try again",
@@ -66,7 +64,7 @@ default = [
 
 
 def response1(answer, count):
-    if count > 1:
+    if count > 0:
         return "You've already asked me this!"
     else:
         feeling = input("I'm fine, and you?\n>")
@@ -75,10 +73,10 @@ def response1(answer, count):
         elif 'good' in feeling or 'fine' in feeling:
             return "That's great!"
         else:
-        return "I don't understand..."
+            return "I don't understand..."
 
 def response2(answer):
-    return str(answer)
+    return "Look at the board!"
 
 def response3(answer):
     if 'paper' in answer or 'marker' in answer or 'sharpie' in answer or 'compass' in answer or 'ruler' in answer or 'draw' in answer or 'books' in answer or 'how' in answer:
@@ -173,22 +171,46 @@ def response6(answer):
         elif minstotal > 785 and minstotal < 860:
             return "class starts at 14:20"
     
-    
-
 def response7(answer):
-    time = datetime.datetime.today()
-    time = str(time)
-    time = time[0:-10]
-    day = time[5:10]
-    time = time[11:]
-    if day in wednesdays:
-        print("x")
+    class1End = 580
+    class2End = 660
+    class3End = 770
+    class4End = 855
+    class5End = 930
+    lunchEnd = 700
+    wedClass1End = 645
+    wedClass2End = 735
+    wedClass3End = 815
+    wedClass4End = 930
+    wedLunchEnd = 860
+    wednesdays = ['01-23','01-30','02-06','02-13','02-20','02-27','03-06','03-13','03-20','03-27','04-03','04-10','04-17','04-24','05-01','05-08','05-15','05-22','05-29','06-05','06-12','06-19','06-26','07-03','07-10','07-17','07-24','07-31']
+    day = datetime.datetime.today()
+    day = str(day)
+    day = day[5:]
+    day = day[:-10]
+    hourmins = int(day[6:8])*60
+    mins = int(day[9:])
+    minstotal = mins + hourmins
+    if minstotal < 510 or minstotal > 930:
+        return "You shouldn't be in school right now. are you alright?"
+    if day[0:5] in wednesdays:
+        if minstotal > 510 and minstotal < 645:
+            return "Class ends at 10:45"
+        elif minstotal > 665 and minstotal < 735:
+            return "Class ends at 12:15"
+        elif minstotal > 745 and minstotal < 815:
+            return "Class ends at 1:35"
     else:
-        print("y")
-    return str(answer)
-
+        if minstotal > 510 and minstotal < 590:
+            return "Class starts at 9:50"
+        elif minstotal > 590 and minstotal < 700:
+            return "Class starts at 11:40"
+        elif minstotal > 700 and minstotal < 785:
+            return "Class starts at 13:05"
+        elif minstotal > 785 and minstotal < 860:
+            return "class starts at 14:20"
 def response8(answer):
-    return str(answer)
+    return "You're supposed to be working."
 def response10(answer):
     music = input("Will you work while you listen to music?\n>")
     if 'ok' in str(music.lower()) or 'sure' in str(music.lower()) or 'yes' in str(music.lower()):
@@ -224,31 +246,27 @@ def name():
 pairs = [
     [
         r'How are you?',
-        [lambda matches: count = count + 1,  response1(matches, count)]
+        [lambda matches: response1(matches, count),count:=1]
     ],
     [
         r'(what)(.*)(we) (gonna do|going to do|do) (today|today?)',
-        #talk and api
         [lambda matches: response2(matches)]
     ],
     [
         r'(where) (can|do|is)(.*)',
-        #need to talk
         [lambda matches: response3(matches)]
     ],
     [
         r'(where) (can|do|should)(.*)',
-        #need to talk
         [lambda matches: response4(matches)]
     ],
     [
         r'(what|which) (block)(.*)(next)',
         #working on api
-       # [lambda matches: response5(matches)]
+       [lambda matches: response5(matches)]
     ],
     [
         r'(what time|when) (does) (class) (start?)',
-        # need api
         [lambda matches: response6(matches)]
     ],
     [
@@ -257,12 +275,11 @@ pairs = [
     ],
     [
         r'(what) (am|are) (i|we) (supposed|should) (do?|to do?)',
-        #talk and api
         [lambda matches: response8(matches)]
     ],
     [
         r'(can|may) (i|we) (listen) (to) (music?|spotify?)',
-        [lambda matches: count = count + 1, response10(matches, count)]
+        [lambda matches: response10(matches)]
     ],
     [
         r'(can|may) (i|we)(.*)(the) (toilet?|bathroom?)',
@@ -271,7 +288,7 @@ pairs = [
     [
         r'(.*)',
         #Max W - find default answers (appropriate ones)
-        [lambda matches: default(matches)]
+        [lambda matches: default(matches), questions.append(answered)]
     ]
 ]
 if __name__ == "__main__":
