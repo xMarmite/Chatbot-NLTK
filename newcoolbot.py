@@ -57,14 +57,13 @@ failsafe = ['quit']
 defaultResponses = [
     "Please try again",
     "I'm sorry, I don't understand...",
-    "",
-    "",
+
 ]
 
 
 
-def response1(answer):
-    if count > 0:
+def response1(answer, questions):
+    if answer in questions:
         return "You've already asked me this!"
     else:
         feeling = input("I'm fine, and you?\n>")
@@ -75,7 +74,9 @@ def response1(answer):
         else:
             return "I don't understand..."
 
-def response2(answer):
+def response2(answer, questions):
+    if answer in questions:
+        return "You've already asked me this!"
     return "Look at the board!"
 
 def response3(answer):
@@ -99,14 +100,6 @@ def response4(answer):
         return "In the recycle bin (Labeled!!!!)"
     else:
         return "I'm not sure, ask Ms.Jordan"
-
-def response5(answer):
-    day = datetime.datetime.today()
-    day = str(day)
-    day = day[:-10]
-    wednesdays = ['01-23','01-30','02-06','02-13','02-20','02-27','03-06','03-13','03-20','03-27','04-03','04-10','04-17','04-24','05-01','05-08','05-15','05-22','05-29','06-05','06-12','06-19','06-26','07-03','07-10','07-17','07-24','07-31']
-
-
     return None
 def response6(answer):
     wednesdays = ['01-23','01-30','02-06','02-13','02-20','02-27','03-06','03-13','03-20','03-27','04-03','04-10','04-17','04-24','05-01','05-08','05-15','05-22','05-29','06-05','06-12','06-19','06-26','07-03','07-10','07-17','07-24','07-31']
@@ -165,7 +158,9 @@ def response7(answer):
             return "Class ends at 14:15"
         elif minstotal > 860 and minstotal < 930:
             return "Class ends at 3:30"
-def response8(answer):
+def response8(answer, questions):
+    if answer in questions:
+        return "You've already asked me this!"
     return "You're supposed to be working."
 def response10(answer):
     music = input("Will you work while you listen to music?\n>")
@@ -176,8 +171,8 @@ def response10(answer):
     else: 
         print("Please give me an answer that makes sense.")
         response10(answer)
-def response11(answer):
-    if count > 1:
+def response11(answer, questions):
+    if answer in questions:
         print("I already gave you permission!")
     else:
         if 'can' in answer:
@@ -187,6 +182,11 @@ def response11(answer):
                 return "Of course you may!"
         elif 'may' in answer:
             return "Of course you may!"
+def response12(answer, name2):
+    if name2 == name:
+        return "I know that!"
+    else:
+        return "That's not your name..."
 def default(answer, questions):
     if 'quit' not in answer:
         questions.append(answer)
@@ -201,11 +201,11 @@ def name():
 pairs = [
     [
         r'How are you?',
-        [lambda matches: response1(matches)]
+        [lambda matches: response1(matches, questions)]
     ],
     [
         r'(what)(.*)(we) (gonna do|going to do|do) (today|today?)',
-        [lambda matches: response2(matches)]
+        [lambda matches: response2(matches, questions)]
     ],
     [
         r'(where) (can|do|is)(.*)',
@@ -214,11 +214,6 @@ pairs = [
     [
         r'(where) (can|do|should)(.*)',
         [lambda matches: response4(matches)]
-    ],
-    [
-        r'(what|which) (block)(.*)(next)',
-        #working on api
-       [lambda matches: response5(matches)]
     ],
     [
         r'(what time|when) (does) (class) (start?)',
@@ -230,7 +225,7 @@ pairs = [
     ],
     [
         r'(what) (am|are) (i|we) (supposed|should) (do?|to do?)',
-        [lambda matches: response8(matches)]
+        [lambda matches: response8(matches, questions)]
     ],
     [
         r'(can|may) (i|we) (listen) (to) (music?|spotify?)',
@@ -238,7 +233,12 @@ pairs = [
     ],
     [
         r'(can|may) (i|we)(.*)(the) (toilet?|bathroom?)',
-        [lambda matches: response11(matches)]
+        [lambda matches: response11(matches, questions)]
+    ],
+    [
+        r'(My name is|I am)(.*)',
+        [lambda matches: response12(matches, name)]
+
     ],
     [
         r'(.*)',
